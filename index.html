@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>x402Orang Apes Mint</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon & OG -->
+  <link rel="icon" type="image/png" href="https://img-cdn.magiceden.dev/rs:fill:400:0:0/plain/https%3A%2F%2Fimg.reservoir.tools%2Fimages%2Fv2%2Fabstract%2Fi9YO%252F4yHXUdJsWcTqhqvfwBUyvEJHbeqxi1xPHw2%252Flae2RBWE35nsP5EvGSu%252F7O9R0xXCBUrJJpVplEeobq8p2EY18xBcgRNxVg92JtohXFJcLBmB5srpcHU5ET%252FDMl2">
+  <meta property="og:title" content="x402Orang Apes Mint" />
+  <meta property="og:description" content="RE-ROLLED ORANG APES 🟧 EACH APE IS UNIQUE 🟧 NOT AFFILIATED WITH BAYC OF YUGA LABS 🟧🟧" />
+  <meta property="og:image" content="https://img-cdn.magiceden.dev/rs:fill:400:0:0/plain/https%3A%2F%2Fimg.reservoir.tools%2Fimages%2Fv2%2Fabstract%2Fi9YO%252F4yHXUdJsWcTqhqvfwBUyvEJHbeqxi1xPHw2%252Flae2RBWE35nsP5EvGSu%252F7O9R0xXCBUrJJpVplEeobq8p2EY18xBcgRNxVg92JtohXFJcLBmB5srpcHU5ET%252FDMl2" />
+
+  <!-- Ethers.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+  <style>
+    body {
+      background: linear-gradient(120deg, #ffb347 0%, #ff8008 100%);
+      min-height: 100vh;
+      margin: 0;
+      font-family: "Roboto", Arial, sans-serif;
+      color: #242424;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      background: #fff3e0;
+      margin-top: 40px;
+      border-radius: 20px;
+      box-shadow: 0 4px 32px #ffb34755;
+      padding: 30px 32px;
+      width: 370px;
+      max-width: 97vw;
+      text-align: center;
+    }
+
+    .ape-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 14px;
+      border: 3px solid #ff8008;
+      object-fit: cover;
+      box-shadow: 0 0 16px #ff800088;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      color: #ff8008;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      font-weight: bold;
+      font-size: 2em;
+      text-shadow: 1px 2px 7px #ff800844;
+    }
+
+    .desc {
+      font-size: 1em;
+      color: #ff8008;
+      margin-bottom: 12px;
+      margin-top: 0;
+      font-weight: 500;
+    }
+
+    #totalSupply {
+      background: linear-gradient(90deg, #ffb34766, #ff800866);
+      color: #ff8008;
+      font-weight: bold;
+      font-size: 1.17em;
+      border-radius: 10px;
+      margin: 15px 0 8px 0;
+      padding: 10px 0;
+      letter-spacing: 1.2px;
+      box-shadow: 0 2px 8px #ff800822;
+    }
+
+    #remainingSupply {
+      background: #ffe6c4;
+      color: #ff8008;
+      border-radius: 10px;
+      margin: 6px 0 10px 0;
+      padding: 8px 0;
+      font-weight: 500;
+      font-size: 1.07em;
+      box-shadow: 0 0px 6px #ff800822;
+    }
+
+    .orange-btn {
+      background: linear-gradient(90deg, #ff8008, #ffb347);
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 15px;
+      padding: 15px 40px;
+      font-size: 1.19em;
+      margin-top: 17px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      box-shadow: 0 3px 16px #ff800822;
+      transition: background 0.15s, box-shadow 0.15s;
+      text-shadow: 0 2px 8px #c90;
+    }
+
+    .orange-btn:hover {
+      background: linear-gradient(90deg, #ffb347, #ff8008);
+      box-shadow: 0 0px 26px #ff800866;
+    }
+
+    .note {
+      font-size: 0.89em;
+      color: #ff8008;
+      margin-top: 15px;
+    }
+
+    a {
+      color: #ff8008!important;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+     <img class="ape-img" src="https://i2c.seadn.io/ethereum/6658f1fb78ec4b0a85e29ce2f37d72d1/8dd8e64307476a62d06b19bb8c6e1b/e88dd8e64307476a62d06b19bb8c6e1b.gif?h=250&w=250">
+    <h1>x402Orang Apes Mint</h1>
+    <p class="desc">Mint your own Orange Ape NFT on Base network!</p>
+    <div id="totalSupply">
+      Total minted: <span id="mintedCount">...</span>
+    </div>
+    <div id="remainingSupply" style="display:none;">
+      Remaining: <span id="remainingCount"></span>
+    </div>
+    <button class="orange-btn" onclick="redirectMint()">
+      Go to Mint Page 🦧
+    </button>
+    <div class="note">
+      Powered by Base | <a target="_blank" href="https://base.org/">Learn more</a>
+    </div>
+  </div>
+
+  <script>
+    const CONTRACT_ADDRESS = "0xd8907aa5d34495e89a2a55fe1677beacd5abbf5e";
+    const NFT_ABI = ["function totalSupply() view returns (uint256)"];
+    const MINT_URL = "https://www.x402scan.com/recipient/0x311238Ef91B5Ba9534500498d34C0315e4a17437/resources";
+    const MAX_SUPPLY = 10000;
+
+    function redirectMint() {
+      window.open(MINT_URL, "_blank");
+    }
+
+    async function fetchSupply() {
+      try {
+        const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, NFT_ABI, provider);
+        const supplyBN = await contract.totalSupply();
+        const minted = Number(supplyBN.toString());
+        document.getElementById("mintedCount").textContent = minted;
+
+        if (typeof MAX_SUPPLY === "number") {
+          const remaining = Math.max(0, MAX_SUPPLY - minted);
+          document.getElementById("remainingCount").textContent = remaining;
+          document.getElementById("remainingSupply").style.display = "";
+        }
+      } catch(e) {
+        console.error(e);
+        document.getElementById("mintedCount").textContent = "???";
+        document.getElementById("remainingSupply").style.display = "none";
+      }
+    }
+
+    fetchSupply();
+    setInterval(fetchSupply, 12000);
+  </script>
+</body>
+</html>
