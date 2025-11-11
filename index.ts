@@ -1,8 +1,8 @@
 import express from "express";
+import cors from "cors";
 import { config } from "dotenv";
 import { paymentMiddleware, Resource } from "x402-express";
 import { ethers } from "ethers";
-import { facilitator } from "@coinbase/x402";
 
 config();
 
@@ -27,31 +27,19 @@ console.log("Server wallet address:", signer.address);
 
 const app = express();
 
+// ✅ CORS açıldı
+app.use(cors({ origin: "*" }));
+app.use(express.json());
+
 // x402 middleware — tüm endpointler için
 app.use(
   paymentMiddleware(
     PAY_TO,
     {
-      "GET /mint": { 
-        price: "$3", 
-        network: "base",
-        config: { description: "Mint 1 x402DeadPunk!" }
-      },
-      "GET /10mint": { 
-        price: "$30", 
-        network: "base",
-        config: { description: "Mint 10 x402DeadPunk!" }
-      },
-      "GET /20mint": { 
-        price: "$60", 
-        network: "base",
-        config: { description: "Mint 20 x402DeadPunk!" }
-      },
-      "GET /minted": {
-        price: "$0.01",
-        network: "base",
-        config: { description: "Check total minted NFTs so far" }
-      }
+      "GET /mint": { price: "$3", network: "base" },
+      "GET /10mint": { price: "$30", network: "base" },
+      "GET /20mint": { price: "$60", network: "base" },
+      "GET /minted": { price: "$0.01", network: "base" }
     },
     { url: FACILITATOR_URL }
   )
@@ -77,7 +65,8 @@ app.get("/mint", async (req, res) => {
     if (!payer) return res.status(402).json({ error: "Payment required" });
 
     const quantity = Number(req.query.quantity) || 1;
-    if (quantity < 1 || quantity > 20) return res.status(400).json({ error: "Invalid quantity" });
+    if (quantity < 1 || quantity > 20)
+      return res.status(400).json({ error: "Invalid quantity" });
 
     const tx = await nftContract.mintTo(payer, quantity);
     await tx.wait();
@@ -94,7 +83,7 @@ app.get("/mint", async (req, res) => {
   }
 });
 
-// /10mint endpoint — sabit 10 NFT
+// /10mint endpoint
 app.get("/10mint", async (req, res) => {
   try {
     const payer = getPayerFromHeader(req.get("x-payment") ?? null);
@@ -116,7 +105,7 @@ app.get("/10mint", async (req, res) => {
   }
 });
 
-// /20mint endpoint — sabit 20 NFT
+// /20mint endpoint
 app.get("/20mint", async (req, res) => {
   try {
     const payer = getPayerFromHeader(req.get("x-payment") ?? null);
@@ -138,13 +127,12 @@ app.get("/20mint", async (req, res) => {
   }
 });
 
-// /minted endpoint — sabit fiyat $0.01
+// /minted endpoint
 app.get("/minted", async (req, res) => {
   try {
     const payer = getPayerFromHeader(req.get("x-payment") ?? null);
     if (!payer) return res.status(402).json({ error: "Payment required" });
 
-    // Ethers v6 artık bigint döndürüyor
     const minted: bigint = await nftContract.totalSupply();
     res.json({
       minted: minted.toString(),
