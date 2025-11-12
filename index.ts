@@ -38,12 +38,12 @@ app.use(
         config: { description: "Mint 1 x402Orang Apes!" }
       },
       "GET /10mint": { 
-        price: "$15", 
+        price: "$13", 
         network: "base",
         config: { description: "Mint 10 x402Orang Apes!" }
       },
       "GET /20mint": { 
-        price: "$30", 
+        price: "$24", 
         network: "base",
         config: { description: "Mint 20 x402Orang Apes!" }
       },
